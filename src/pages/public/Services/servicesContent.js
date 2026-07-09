@@ -10,7 +10,7 @@ const pageData = {
      primaryButtonLink: "/plans-and-pricing",
     secondaryButton: "Our Process",
     backgroundImage:
-      "/src/assets/services/screen1.png",
+      "/public/images/services/screen1.png",
   },
 
   services: {
@@ -62,7 +62,7 @@ const pageData = {
         "We don't just record events; we document experiences. Our team utilizes cinema-grade equipment to ensure that every speech, reaction, and key moment is preserved in 4K RAW quality.",
 
       image:
-        "/src/assets/services/screen2.png",
+        "/public/images/services/screen2.png",
 
       bullets: [
         "4K & 8K multi-camera streaming and recording",
@@ -84,7 +84,7 @@ const pageData = {
         "Our training programs are designed for serious creators. From foundational camera mechanics to advanced narrative lighting, we bridge the gap between amateur curiosity and professional mastery.",
 
       image:
-        "/src/assets/services/screen3.png",
+        "/public/images/services/screen3.png",
 
       bullets: [
         "Hands-on sessions with industry-grade equipment",

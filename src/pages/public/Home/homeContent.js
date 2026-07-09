@@ -12,7 +12,7 @@ export const fallbackHomeData = {
       text: "View Portfolio"
     },
 
-    backgroundImage: "/src/assets/home/homescreenIMGTac10.png",
+    backgroundImage: "/public/images/home/homescreenIMGTac10.png",
   },
 
   legacy: {
@@ -24,7 +24,7 @@ export const fallbackHomeData = {
       "We believe that true mastery requires immersion. Our facilities mirror industry-standard production environments, ensuring that the transition from academy to actual set is seamless and intuitive.",
     ],
 
-    image: "/src/assets/home/screen1.png",
+    image: "/public/images/home/screen1.png",
 
       link: {
     text: "Explore Our Story"
@@ -88,7 +88,7 @@ export const fallbackHomeData = {
 
         duration: "8 WEEKS",
 
-        image: "/src/assets/home/screen2.png",
+        image: "/public/images/home/screen2.png",
 
         title: "The Cinematography Masterclass",
 
@@ -103,7 +103,7 @@ export const fallbackHomeData = {
 
         duration: "6 WEEKS",
 
-        image: "/src/assets/home/screen3.png",
+        image: "/public/images/home/screen3.png",
 
         title: "Advanced Post-Production",
 
@@ -118,7 +118,7 @@ export const fallbackHomeData = {
 
         duration: "12 WEEKS",
 
-        image: "/src/assets/home/screen4.png",
+        image: "/public/images/home/screen4.png",
 
         title: "Directing for the Screen",
 
@@ -136,7 +136,7 @@ export const fallbackHomeData = {
   subtitle:
     "Whether you're building a brand, capturing an event, or mastering the craft of filmmaking — we help you execute at the highest level.",
   buttonText: "Get Started",
-  image: "/src/assets/home/screen5.png",
+  image: "/public/images/home/screen5.png",
 },
 
 };

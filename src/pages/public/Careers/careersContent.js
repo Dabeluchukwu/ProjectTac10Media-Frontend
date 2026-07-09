@@ -17,7 +17,7 @@ export const careersContent = {
       action: "culture",
     },
 
-    backgroundImage: "/src/assets/career/screen4.png",
+    backgroundImage: "/public/images/career/screen4.png",
   },
 
   whyWork: {
@@ -61,19 +61,19 @@ export const careersContent = {
     gallery: [
       {
         id: 1,
-        image: "/src/assets/career/screen2.png",
+        image: "/public/images/career/screen2.png",
         alt: "Editing Suite",
       },
 
       {
         id: 2,
-        image: "/src/assets/career/screen1.png",
+        image: "/public/images/career/screen1.png",
         alt: "Cinema Lens",
       },
 
       {
         id: 3,
-        image: "/src/assets/career/screen3.png",
+        image: "/public/images/career/screen3.png",
         alt: "Creative Workspace",
       },
     ],

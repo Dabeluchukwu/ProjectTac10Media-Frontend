@@ -20,7 +20,7 @@
 
 // export default DashboardLayout;
 
-import Sidebar from "../components/sidebar/SideBar";
+import Sidebar from "../components/sidebar/sidebar";
 import { Outlet } from "react-router-dom";
 
 const DashboardLayout = () => {

@@ -1,6 +1,7 @@
 
 
-import Sidebar from "../components/sidebar/sidebar.jsx";
+// ✅ This will work because Vite will automatically look for index.js
+import Sidebar from "../components/sidebar";
 import { Outlet } from "react-router-dom";
 
 const DashboardLayout = () => {

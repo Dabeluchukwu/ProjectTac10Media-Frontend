@@ -1,17 +1,19 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
 const Hero = ({ data }) => {
   if (!data) return null;
 
   const {
-    badge = "",
-    title = "",
-    description = "",
-    primaryButton = "Learn More",
-    secondaryButton = "Our Process",
-    backgroundImage = "",
-  } = data;
+  badge = "",
+  title = "",
+  description = "",
+  primaryButton = "Learn More",
+  primaryButtonLink = "/",
+  secondaryButton = "Our Process",
+  backgroundImage = "",
+} = data;
 
   return (
     <section
@@ -51,10 +53,12 @@ const Hero = ({ data }) => {
         )}
 
         <div className="mt-12 flex flex-col sm:flex-row justify-center gap-5">
-          <button className="bg-amber-400 text-black px-8 py-4 font-semibold rounded-md hover:bg-amber-300 transition-all duration-300 hover:scale-105">
-            {primaryButton}
-          </button>
-
+      <Link
+  to={primaryButtonLink}
+  className="bg-amber-400 text-black px-8 py-4 font-semibold rounded-md hover:bg-amber-300 transition-all duration-300 hover:scale-105 inline-flex items-center justify-center"
+>
+  {primaryButton}
+</Link>
           <button className="inline-flex items-center justify-center gap-2 text-white font-medium hover:text-amber-400 transition-colors duration-300">
             {secondaryButton}
             <ArrowRight className="w-5 h-5" />

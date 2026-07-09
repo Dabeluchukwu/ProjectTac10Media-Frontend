@@ -159,7 +159,7 @@ const StudentView = () => {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-6">
-          <h3 className="font-semibold mb-3">📚 Browse Courses</h3>
+          <h3 className="font-semibold mb-3 text-white">📚 Browse Courses</h3>
           <p className="text-sm text-gray-400 mb-4">Discover new courses to enhance your skills.</p>
           <button
             onClick={() => navigate("/courses")}
@@ -170,7 +170,7 @@ const StudentView = () => {
         </div>
 
         <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-6">
-          <h3 className="font-semibold mb-3">📖 Continue Learning</h3>
+          <h3 className="font-semibold mb-3 text-white">📖 Continue Learning</h3>
           <p className="text-sm text-gray-400 mb-4">Pick up where you left off in your courses.</p>
           <button
             onClick={() => navigate("/dashboard/courses")}
@@ -181,7 +181,7 @@ const StudentView = () => {
         </div>
 
         <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-6">
-          <h3 className="font-semibold mb-3">📊 Track Progress</h3>
+          <h3 className="font-semibold mb-3 text-white">📊 Track Progress</h3>
           <p className="text-sm text-gray-400 mb-4">View your learning progress and achievements.</p>
           <button
             onClick={() => navigate("/dashboard/progress")}

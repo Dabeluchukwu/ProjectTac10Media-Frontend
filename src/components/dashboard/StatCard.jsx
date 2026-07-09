@@ -41,10 +41,24 @@ const StatCard = ({ title, value, icon, color }) => {
   };
 
   return (
-    <div className={`${color?.bg || defaultColors.bg} p-6 rounded-xl border ${color?.border || defaultColors.border}`}>
-      {icon && <div className="text-3xl mb-2">{icon}</div>}
-      <p className="text-2xl font-bold">{value}</p>
-      <p className="text-sm opacity-80">{title}</p>
+    <div
+      className={`${color?.bg || defaultColors.bg} p-6 rounded-xl border ${
+        color?.border || defaultColors.border
+      }`}
+    >
+      {icon && (
+        <div className={`text-3xl mb-2 ${color?.text || defaultColors.text}`}>
+          {icon}
+        </div>
+      )}
+
+      <p className={`text-2xl font-bold ${color?.text || defaultColors.text}`}>
+        {value}
+      </p>
+
+      <p className={`text-sm opacity-80 ${color?.text || defaultColors.text}`}>
+        {title}
+      </p>
     </div>
   );
 };

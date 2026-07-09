@@ -26,6 +26,8 @@ import JobDetails from "../pages/public/Careers/JobDetails";
 // Auth Pages
 const Login = lazy(() => import("../pages/auth/Login"));
 const Register = lazy(() => import("../pages/auth/Register"));
+import ForgotPassword from "../pages/auth/ForgotPassword";
+import ResetPassword from "../pages/auth/ResetPassword";
 
 // payment Checkout
 const PaymentCheckout = lazy(() => import("../pages/user/PaymentCheckout"));
@@ -103,6 +105,14 @@ const router = createBrowserRouter([
     children: [
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "reset-password/:token",
+        element: <ResetPassword />,
+      },
     ],
   },
 

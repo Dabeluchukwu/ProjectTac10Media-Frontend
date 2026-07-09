@@ -6,7 +6,8 @@ const pageData = {
     title: "Production Excellence Redefined",
     description:
       "From capturing high-stakes corporate summits to crafting cinematic legacies, TAC 10 MEDIA provides the technical precision and creative vision required for world-class visual storytelling.",
-    primaryButton: "View Portfolios",
+    primaryButton: "View Packages",
+     primaryButtonLink: "/plans-and-pricing",
     secondaryButton: "Our Process",
     backgroundImage:
       "/src/assets/services/screen1.png",

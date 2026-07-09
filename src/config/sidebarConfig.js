@@ -10,7 +10,7 @@ export const sidebarConfig = {
   client: [
     { name: "Dashboard", path: "/dashboard", icon: "📊" },
     { name: "My Bookings", path: "/dashboard/bookings", icon: "📅" },
-    { name: "Services", path: "/services", icon: "🎬" },
+    { name: "Services", path: "/plans-and-pricing", icon: "🎬" },
     { name: "Payments", path: "/dashboard/payments", icon: "💳" },
     { name: "Profile", path: "/dashboard/profile", icon: "👤" },
   ],

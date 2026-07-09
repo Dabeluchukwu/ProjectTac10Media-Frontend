@@ -168,8 +168,9 @@ const navLinks = [
   { name: "About", path: "/about" },
   { name: "Courses", path: "/courses" },
   { name: "Services", path: "/services" },
-  { name: "Gallery", path: "/gallery" },
+  // { name: "Gallery", path: "/gallery" },
   { name: "Careers", path: "/careers" },
+   { name: "Plan & Pricing", path: "/plans-and-pricing" },
   { name: "Contact", path: "/contact" },
 ];
 

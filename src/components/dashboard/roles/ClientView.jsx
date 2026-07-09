@@ -121,7 +121,7 @@ const ClientView = () => {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-6">
-          <h3 className="font-semibold mb-3">🎬 Book a Service</h3>
+          <h3 className="font-semibold mb-3 text-white">🎬 Book a Service</h3>
           <p className="text-sm text-gray-400 mb-4">Plan your next production or event coverage.</p>
           <button
             onClick={() => navigate("/plans-and-pricing")}
@@ -132,7 +132,7 @@ const ClientView = () => {
         </div>
 
         <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-6">
-          <h3 className="font-semibold mb-3">📋 My Bookings</h3>
+          <h3 className="font-semibold mb-3 text-white">📋 My Bookings</h3>
           <p className="text-sm text-gray-400 mb-4">View and manage your existing bookings.</p>
           <button
             onClick={() => navigate("/dashboard/bookings")}
@@ -143,7 +143,7 @@ const ClientView = () => {
         </div>
 
         <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-6">
-          <h3 className="font-semibold mb-3">💳 Payments</h3>
+          <h3 className="font-semibold mb-3 text-white">💳 Payments</h3>
           <p className="text-sm text-gray-400 mb-4">View your payment history and invoices.</p>
           <button
             onClick={() => navigate("/dashboard/payments")}

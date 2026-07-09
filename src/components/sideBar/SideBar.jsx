@@ -106,7 +106,7 @@ import useAuthStore from "../../store/authStore";
 import { sidebarConfig } from "../../config/sidebarConfig";
 import ProfileDropdown from "../common/ProfileDropdown";
 
-const Sidebar = () => {
+const sidebar = () => {
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
@@ -180,4 +180,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default sidebar;

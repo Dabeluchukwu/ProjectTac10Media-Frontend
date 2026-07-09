@@ -26,6 +26,6 @@ export const forgotPassword = (data) => {
 
 // reset password
 
-export const resetPassword = (data) => {
-  return api.post("/auth/reset-password", data);
+export const resetPassword = (token, data) => {
+  return api.post(`/auth/reset-password/${token}`, data);
 };

@@ -1,5 +1,6 @@
 import React from "react";
 import { ArrowRight, PhoneCall } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const CTASection = ({ data }) => {
   if (!data) return null;
@@ -31,14 +32,15 @@ const CTASection = ({ data }) => {
                 </p>
               )}
 
-              <button className="group mt-10 inline-flex items-center gap-3 rounded-md bg-amber-400 px-8 py-4 font-semibold text-black transition duration-300 hover:bg-amber-300">
+              <Link
+            to="/contact" className="group mt-10 inline-flex items-center gap-3 rounded-md bg-amber-400 px-8 py-4 font-semibold text-black transition duration-300 hover:bg-amber-300">
                 {button}
 
                 <ArrowRight
                   size={18}
                   className="transition-transform duration-300 group-hover:translate-x-1"
                 />
-              </button>
+             </Link>
             </div>
 
             {/* Right Card */}

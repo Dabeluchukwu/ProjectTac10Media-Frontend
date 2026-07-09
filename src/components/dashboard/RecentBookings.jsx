@@ -5,7 +5,7 @@ const RecentBookings = ({ bookings = [], loading = false }) => {
 
   if (loading) {
     return (
-      <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-6">
+      <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-4 sm:p-6">
         <div className="animate-pulse">
           <div className="h-4 bg-neutral-700 rounded w-1/3 mb-4"></div>
           <div className="space-y-3">
@@ -42,13 +42,13 @@ const RecentBookings = ({ bookings = [], loading = false }) => {
   };
 
   return (
-    <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-6">
+    <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-4 sm:p-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-white">Recent Bookings</h2>
+        <h2 className="text-base sm:text-lg font-semibold text-white">Recent Bookings</h2>
         {bookings.length > 0 && (
           <button
             onClick={() => navigate("/dashboard/bookings")}
-            className="text-sm text-amber-400 hover:text-amber-300 transition"
+            className="text-xs sm:text-sm text-amber-400 hover:text-amber-300 transition"
           >
             View All
           </button>
@@ -66,26 +66,30 @@ const RecentBookings = ({ bookings = [], loading = false }) => {
           </button>
         </div>
       ) : (
-        <div className="space-y-3">
-          {bookings.slice(0, 5).map((booking) => (
-            <div
-              key={booking._id}
-              className="flex items-center justify-between p-3 bg-neutral-800 rounded-lg hover:bg-neutral-700 transition"
-            >
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-white truncate">
-                  {booking.service?.name || booking.package?.name || "Booking"}
-                </p>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className={`text-xs px-2 py-0.5 rounded ${getStatusBadge(booking.status)}`}>
-                    {booking.status || "pending"}
-                  </span>
-                  <span className="text-xs text-gray-400">{formatCurrency(booking.amount)}</span>
+        <div className="-mx-4 sm:mx-0 overflow-x-auto">
+          <div className="min-w-full inline-block align-middle px-4 sm:px-0">
+            <div className="space-y-3">
+              {bookings.slice(0, 5).map((booking) => (
+                <div
+                  key={booking._id}
+                  className="flex flex-wrap items-center justify-between p-3 bg-neutral-800 rounded-lg hover:bg-neutral-700 transition gap-2"
+                >
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-white truncate">
+                      {booking.service?.name || booking.package?.name || "Booking"}
+                    </p>
+                    <div className="flex flex-wrap items-center gap-2 mt-1">
+                      <span className={`text-xs px-2 py-0.5 rounded ${getStatusBadge(booking.status)}`}>
+                        {booking.status || "pending"}
+                      </span>
+                      <span className="text-xs text-gray-400">{formatCurrency(booking.amount)}</span>
+                      <span className="text-xs text-gray-500">{formatDate(booking.bookingDate)}</span>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-xs text-gray-500">{formatDate(booking.bookingDate)}</p>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       )}
 

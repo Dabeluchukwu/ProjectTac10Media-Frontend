@@ -5,7 +5,7 @@ const ProgressCard = ({ progress = [], loading = false }) => {
 
   if (loading) {
     return (
-      <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-6">
+      <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-4 sm:p-6">
         <div className="animate-pulse">
           <div className="h-4 bg-neutral-700 rounded w-1/3 mb-4"></div>
           <div className="space-y-4">
@@ -22,13 +22,13 @@ const ProgressCard = ({ progress = [], loading = false }) => {
   }
 
   return (
-    <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-6">
+    <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-4 sm:p-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-white">Course Progress</h2>
+        <h2 className="text-base sm:text-lg font-semibold text-white">Course Progress</h2>
         {progress.length > 0 && (
           <button
             onClick={() => navigate("/dashboard/progress")}
-            className="text-sm text-amber-400 hover:text-amber-300 transition"
+            className="text-xs sm:text-sm text-amber-400 hover:text-amber-300 transition"
           >
             View All
           </button>
@@ -48,8 +48,8 @@ const ProgressCard = ({ progress = [], loading = false }) => {
 
             return (
               <div key={item._id || item.course?._id || item.courseId}>
-                <div className="flex justify-between items-center mb-1">
-                  <span className="text-sm font-medium text-white truncate">
+                <div className="flex flex-wrap justify-between items-center mb-1 gap-1">
+                  <span className="text-sm font-medium text-white truncate max-w-[65%]">
                     {item.course?.title || "Unknown Course"}
                   </span>
                   <span className={`text-sm font-semibold ${isCompleted ? "text-green-400" : "text-amber-400"}`}>

@@ -107,8 +107,8 @@ const Courses = () => {
 
       <CTA
         data={page?.cta}
-        onPrimaryClick={() => console.log("Primary CTA")}
-        onSecondaryClick={() => console.log("Secondary CTA")}
+         onPrimaryClick="/register"
+  onSecondaryClick="/plans-and-pricing"
       />
     </main>
   );

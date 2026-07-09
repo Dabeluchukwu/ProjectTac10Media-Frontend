@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 const ctaMap = {
   "Premium Event Coverage": {
     text: "Book Your Event",
-    link: "/contact",
+    link: "/plans-and-pricing",
   },
   "Cinematography Training": {
     text: "Explore Training",

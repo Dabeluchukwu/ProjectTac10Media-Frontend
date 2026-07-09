@@ -1,32 +1,3 @@
-// import useAuthStore from "../../store/authStore";
-
-// import DashboardHeader from "../../components/dashboard/DashboardHeader";
-
-// import StudentView from "../../components/dashboard/roles/StudentView";
-
-// import ClientView from "../../components/dashboard/roles/ClientView";
-
-// const Dashboard = () => {
-//   const user = useAuthStore((state) => state.user);
-
-//   const role = user?.role;
-
-//   return (
-//     <div>
-//       <DashboardHeader />
-
-//       {role === "student" && <StudentView />}
-
-//       {role === "client" && <ClientView />}
-
-//       {!role && <div>Loading dashboard...</div>}
-//     </div>
-//   );
-// };
-
-// export default Dashboard;
-
-
 import useAuthStore from "../../store/authStore";
 import DashboardHeader from "../../components/dashboard/DashboardHeader";
 import StudentView from "../../components/dashboard/roles/StudentView";

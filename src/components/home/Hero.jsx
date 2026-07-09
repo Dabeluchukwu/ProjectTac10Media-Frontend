@@ -36,7 +36,7 @@ const Hero = ({ data }) => {
           {/* CTAs */}
           <div className="flex flex-wrap justify-center gap-4 mt-8">
             <a
-              href="/contact"
+              href="/plans-and-pricing"
               className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-black px-7 py-3 rounded-md font-semibold transition-all duration-300"
             >
               {data.primaryButton.text}
@@ -44,7 +44,7 @@ const Hero = ({ data }) => {
             </a>
 
             <a
-              href="/portfolio"
+              href="/services"
               className="inline-flex items-center gap-3 border border-white/30 hover:border-white text-white px-7 py-3 rounded-md transition-all duration-300 hover:bg-white/10"
             >
               <Play size={18} />

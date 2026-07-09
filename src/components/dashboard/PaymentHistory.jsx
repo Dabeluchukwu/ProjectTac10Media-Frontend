@@ -5,7 +5,7 @@ const PaymentHistory = ({ payments = [], loading = false }) => {
 
   if (loading) {
     return (
-      <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-6">
+      <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-4 sm:p-6">
         <div className="animate-pulse">
           <div className="h-4 bg-neutral-700 rounded w-1/3 mb-4"></div>
           <div className="space-y-3">
@@ -17,15 +17,6 @@ const PaymentHistory = ({ payments = [], loading = false }) => {
       </div>
     );
   }
-
-  const getStatusColor = (status) => {
-    const colors = {
-      success: "text-green-400",
-      pending: "text-yellow-400",
-      failed: "text-red-400",
-    };
-    return colors[status] || "text-gray-400";
-  };
 
   const getStatusBadge = (status) => {
     const colors = {
@@ -49,13 +40,13 @@ const PaymentHistory = ({ payments = [], loading = false }) => {
   };
 
   return (
-    <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-6">
+    <div className="bg-neutral-900 rounded-xl border border-neutral-800 p-4 sm:p-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-white">Payment History</h2>
+        <h2 className="text-base sm:text-lg font-semibold text-white">Payment History</h2>
         {payments.length > 0 && (
           <button
             onClick={() => navigate("/dashboard/payments")}
-            className="text-sm text-amber-400 hover:text-amber-300 transition"
+            className="text-xs sm:text-sm text-amber-400 hover:text-amber-300 transition"
           >
             View All
           </button>
@@ -68,34 +59,40 @@ const PaymentHistory = ({ payments = [], loading = false }) => {
           <p className="text-sm text-gray-500 mt-1">Your payments will appear here.</p>
         </div>
       ) : (
-        <div className="space-y-3">
-          {payments.slice(0, 5).map((payment) => (
-            <div
-              key={payment._id}
-              className="flex items-center justify-between p-3 bg-neutral-800 rounded-lg hover:bg-neutral-700 transition"
-            >
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-white">
-                    {formatCurrency(payment.amount)}
-                  </span>
-                  <span className={`text-xs px-2 py-0.5 rounded ${getStatusBadge(payment.status)}`}>
-                    {payment.status || "pending"}
-                  </span>
+        <div className="-mx-4 sm:mx-0 overflow-x-auto">
+          <div className="min-w-full inline-block align-middle px-4 sm:px-0">
+            <div className="space-y-3">
+              {payments.slice(0, 5).map((payment) => (
+                <div
+                  key={payment._id}
+                  className="flex flex-wrap items-center justify-between p-3 bg-neutral-800 rounded-lg hover:bg-neutral-700 transition gap-2"
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-sm font-medium text-white">
+                        {formatCurrency(payment.amount)}
+                      </span>
+                      <span className={`text-xs px-2 py-0.5 rounded ${getStatusBadge(payment.status)}`}>
+                        {payment.status || "pending"}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 mt-1">
+                      <p className="text-xs text-gray-400">
+                        {formatDate(payment.createdAt)}
+                      </p>
+                      {payment.purpose && (
+                        <span className="text-xs text-gray-500">
+                          {payment.purpose === "course" ? "Course Enrollment" : 
+                           payment.purpose === "booking" ? "Service Booking" : 
+                           payment.purpose || "Payment"}
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 </div>
-                <p className="text-xs text-gray-400">
-                  {formatDate(payment.createdAt)}
-                </p>
-                {payment.purpose && (
-                  <p className="text-xs text-gray-500">
-                    {payment.purpose === "course" ? "Course Enrollment" : 
-                     payment.purpose === "booking" ? "Service Booking" : 
-                     payment.purpose || "Payment"}
-                  </p>
-                )}
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       )}
 

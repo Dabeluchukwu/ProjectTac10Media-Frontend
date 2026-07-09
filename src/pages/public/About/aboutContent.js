@@ -5,7 +5,7 @@ const pageData = {
     title: "Behind the Lens",
     subtitle: "Mastering the art of visual storytelling.",
     background:
-      "/public/images/about/screen6.png",
+      "/images/about/screen6.png",
   },
 
   story: {
@@ -16,7 +16,7 @@ const pageData = {
       "Our curriculum is meticulously designed to push boundaries. We place our students directly into simulated high-stakes scenarios, challenging them to light, shoot, and grade with the same precision expected on a major motion picture set. This is where classical technique meets cutting-edge technology.",
     ],
     image:
-      "/public/images/about/screen7.png",
+      "/images/about/screen7.png",
   },
 
   values: [

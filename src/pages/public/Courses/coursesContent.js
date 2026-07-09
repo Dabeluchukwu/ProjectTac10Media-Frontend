@@ -1,6 +1,6 @@
 export const fallbackData = {
   hero: {
-    backgroundImage: "/public/images/courses/screen1.png",
+    backgroundImage: "/images/courses/screen1.png",
     pageBadge: "MASTER YOUR CRAFT",
     pageTitle: "Expand Your Creative Potential",
     pageDescription:
@@ -20,7 +20,7 @@ export const fallbackData = {
   },
 
   cta: {
-     backgroundImage: "/public/images/courses/screen6.png",
+     backgroundImage: "/images/courses/screen6.png",
     title: "Ready to Frame Your Vision?",
     description:
       "Join a community of dedicated filmmakers. Gain access to all masterclasses, exclusive workshops, and our proprietary resource library.",

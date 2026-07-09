@@ -7,7 +7,7 @@ const pageData = {
     subtitle:
       "Begin a partnership defined by cinematic excellence and creative mastery.",
     image:
-      "/public/images/contact/screen2.png",
+      "/images/contact/screen2.png",
   },
 
   consultation: {
@@ -17,7 +17,7 @@ const pageData = {
       "We offer bespoke pathways for high-stakes media projects and institutional partnerships. Our process is designed for clarity, scale, and uncompromising quality.",
 
     image:
-      "/public/images/contact/screen1.png",
+      "/images/contact/screen1.png",
 
     services: [
       {

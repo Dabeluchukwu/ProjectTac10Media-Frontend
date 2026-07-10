@@ -7,9 +7,16 @@
     
     <!-- ✅ Updated CSP with backend URL -->
     <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.paystack.com https://js.paystack.co https://*.paystack.com blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; connect-src 'self' https://api.paystack.co https://*.paystack.com https://projecttac10media-backend.onrender.com; frame-src https://checkout.paystack.com;" />
+          content="
+            default-src 'self'; 
+            script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.paystack.com https://js.paystack.co https://*.paystack.com https://www.googletagmanager.com https://*.googletagmanager.com blob:; 
+            style-src 'self' 'unsafe-inline'; 
+            img-src 'self' data: https: blob: https://*.google-analytics.com; 
+            connect-src 'self' https://api.paystack.co https://*.paystack.com https://projecttac10media-backend.onrender.com https://www.google-analytics.com https://*.google-analytics.com; 
+            frame-src https://checkout.paystack.com; 
+          " />
     
-    <title>projecttac10media-frontend</title>
+    <title>TAC 10 MEDIA</title>
   </head>
   <body>
     <div id="root"></div>

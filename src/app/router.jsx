@@ -4,81 +4,74 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import ProtectedRoute from "../guards/ProtectedRoute";
 
 // Layouts
-import MainLayout from "../layouts/MainLayout";
-import AuthLayout from "../layouts/AuthLayout";
-import DashboardLayout from "../layouts/DashboardLayout";
-// import AdminLayout from "../layouts/AdminLayout";
+const MainLayout = lazy(() => import("../layouts/MainLayout"));
+const AuthLayout = lazy(() => import("../layouts/AuthLayout"));
+const DashboardLayout = lazy(() => import("../layouts/DashboardLayout"));
+const InstructorLayout = lazy(() => import("../layouts/InstructorLayout"));
+const AdminLayout = lazy(() => import("../layouts/AdminLayout"));
+const SuperAdminLayout = lazy(() => import("../layouts/SuperAdminLayout"));
 
 // Public Pages
 const Home = lazy(() => import("../pages/public/Home/Home"));
 const About = lazy(() => import("../pages/public/About/About"));
 const Courses = lazy(() => import("../pages/public/Courses/Courses"));
-const CourseDetails = lazy(
-  () => import("../pages/public/Courses/CourseDetails"),
-);
+const CourseDetails = lazy(() => import("../pages/public/Courses/CourseDetails"));
 const LearnCourse = lazy(() => import("../pages/user/LearnCourse"));
 const Contact = lazy(() => import("../pages/public/Contact/Contact"));
 const Services = lazy(() => import("../pages/public/Services/Services"));
 const Careers = lazy(() => import("../pages/public/Careers/Careers"));
-import PlansAndPricing from "../pages/public/PlansAndPricing/PlansAndPricing";
-import JobDetails from "../pages/public/Careers/JobDetails";
+const PlansAndPricing = lazy(() => import("../pages/public/PlansAndPricing/PlansAndPricing"));
+const JobDetails = lazy(() => import("../pages/public/Careers/JobDetails"));
 
 // Auth Pages
 const Login = lazy(() => import("../pages/auth/Login"));
 const Register = lazy(() => import("../pages/auth/Register"));
-import ForgotPassword from "../pages/auth/ForgotPassword";
-import ResetPassword from "../pages/auth/ResetPassword";
+const ForgotPassword = lazy(() => import("../pages/auth/ForgotPassword"));
+const ResetPassword = lazy(() => import("../pages/auth/ResetPassword"));
 
-// payment Checkout
+// Payment Pages
 const PaymentCheckout = lazy(() => import("../pages/user/PaymentCheckout"));
+const PaymentVerify = lazy(() => import("../pages/PaymentVerify"));
 
-// User
+// User Dashboard Pages
 const UserDashboard = lazy(() => import("../pages/user/Dashboard"));
-import MyCourses from "../pages/user/MyCourses";
-import MyBookings from "../pages/user/MyBookings";
-import Payments from "../pages/user/Payments";
-import Settings from "../pages/user/Settings";
-import MyProgress from "../pages/user/CourseProgress";
-import Exam from "../pages/user/Exam";
-import ExamResults from "../pages/user/ExamResults";
-import Certificates from "../pages/user/Certificates";
-
-// Profile page
-import Profile from "../pages/user/Profile";
-
-// Booking Route
-import BookingForm from "../pages/user/BookingForm";
+const MyCourses = lazy(() => import("../pages/user/MyCourses"));
+const MyBookings = lazy(() => import("../pages/user/MyBookings"));
+const Payments = lazy(() => import("../pages/user/Payments"));
+const Settings = lazy(() => import("../pages/user/Settings"));
+const MyProgress = lazy(() => import("../pages/user/CourseProgress"));
+const Exam = lazy(() => import("../pages/user/Exam"));
+const ExamResults = lazy(() => import("../pages/user/ExamResults"));
+const Certificates = lazy(() => import("../pages/user/Certificates"));
+const Profile = lazy(() => import("../pages/user/Profile"));
+const BookingForm = lazy(() => import("../pages/user/BookingForm"));
 
 // Instructor Pages
-import InstructorLayout from "../layouts/InstructorLayout";
-import InstructorDashboard from "../pages/instructor/Dashboard";
-import InstructorCourses from "../pages/instructor/Courses";
-import InstructorCourseForm from "../pages/instructor/CourseForm";
-import InstructorStudents from "../pages/instructor/Students";
-import InstructorAnalytics from "../pages/instructor/Analytics";
+const InstructorDashboard = lazy(() => import("../pages/instructor/Dashboard"));
+const InstructorCourses = lazy(() => import("../pages/instructor/Courses"));
+const InstructorCourseForm = lazy(() => import("../pages/instructor/CourseForm"));
+const InstructorStudents = lazy(() => import("../pages/instructor/Students"));
+const InstructorAnalytics = lazy(() => import("../pages/instructor/Analytics"));
 
-// Admin Routes
-import AdminLayout from "../layouts/AdminLayout";
-import AdminDashboard from "../pages/admin/Dashboard";
-import AdminUsers from "../pages/admin/Users";
-import AdminCourses from "../pages/admin/Courses/Courses";
-import AdminBookings from "../pages/admin/Bookings/Bookings";
-import AdminCourseForm from "../pages/admin/Courses/CourseForm";
-import AdminPayments from "../pages/admin/Payments";
-import AdminJobs from "../pages/admin/Jobs";
+// Admin Pages
+const AdminDashboard = lazy(() => import("../pages/admin/Dashboard"));
+const AdminUsers = lazy(() => import("../pages/admin/Users"));
+const AdminCourses = lazy(() => import("../pages/admin/Courses/Courses"));
+const AdminBookings = lazy(() => import("../pages/admin/Bookings/Bookings"));
+const AdminCourseForm = lazy(() => import("../pages/admin/Courses/CourseForm"));
+const AdminPayments = lazy(() => import("../pages/admin/Payments"));
+const AdminJobs = lazy(() => import("../pages/admin/Jobs"));
+const AdminPackages = lazy(() => import("../pages/admin/Packages/Packages"));
+const PackageForm = lazy(() => import("../pages/admin/Packages/PackageForm"));
+const AdminServices = lazy(() => import("../pages/admin/Services/Services"));
+const ServiceForm = lazy(() => import("../pages/admin/Services/ServiceForm"));
 
-import AdminPackages from "../pages/admin/Packages/Packages";
-import PackageForm from "../pages/admin/Packages/PackageForm";
-import AdminServices from "../pages/admin/Services/Services";
-import ServiceForm from "../pages/admin/Services/ServiceForm";
-
-// SuperAdmin Dashboard
-import SuperAdminLayout from "../layouts/SuperAdminLayout";
-import SuperAdminDashboard from "../pages/super-admin/Dashboard";
-import SuperAdminUsers from "../pages/super-admin/Users";
-import SuperAdminAdmins from "../pages/super-admin/Admins";
-import SuperAdminSettings from "../pages/super-admin/Settings";
-import SuperAdminAnalytics from "../pages/super-admin/Analytics";
+// SuperAdmin Pages
+const SuperAdminDashboard = lazy(() => import("../pages/super-admin/Dashboard"));
+const SuperAdminUsers = lazy(() => import("../pages/super-admin/Users"));
+const SuperAdminAdmins = lazy(() => import("../pages/super-admin/Admins"));
+const SuperAdminSettings = lazy(() => import("../pages/super-admin/Settings"));
+const SuperAdminAnalytics = lazy(() => import("../pages/super-admin/Analytics"));
 
 const router = createBrowserRouter([
   // PUBLIC PAGES
@@ -105,14 +98,8 @@ const router = createBrowserRouter([
     children: [
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
-      {
-        path: "forgot-password",
-        element: <ForgotPassword />,
-      },
-      {
-        path: "reset-password/:token",
-        element: <ResetPassword />,
-      },
+      { path: "forgot-password", element: <ForgotPassword /> },
+      { path: "reset-password/:token", element: <ResetPassword /> },
     ],
   },
 
@@ -131,10 +118,10 @@ const router = createBrowserRouter([
   },
   {
     path: "payment/verify",
-    element: <PaymentCheckout />,
+    element: <PaymentVerify />,
   },
 
-  // ✅ EXAM PAGES - MOVED TO ROOT LEVEL
+  // EXAM PAGES
   {
     path: "exam/:courseId",
     element: <Exam />,
@@ -144,6 +131,7 @@ const router = createBrowserRouter([
     element: <ExamResults />,
   },
 
+  // BOOKING
   {
     path: "booking",
     element: <BookingForm />,
@@ -163,7 +151,6 @@ const router = createBrowserRouter([
       { path: "settings", element: <Settings /> },
       { path: "progress", element: <MyProgress /> },
       { path: "certificates", element: <Certificates /> },
-      { path: "profile", element: <Profile /> },
     ],
   },
 
@@ -191,7 +178,7 @@ const router = createBrowserRouter([
     ],
   },
 
-  // Admin routes
+  // ADMIN ROUTES
   {
     path: "/admin",
     element: <ProtectedRoute allowedRoles={["admin", "superAdmin"]} />,

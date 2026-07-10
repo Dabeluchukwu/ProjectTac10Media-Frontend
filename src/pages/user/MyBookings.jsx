@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom"; 
 import { useQuery } from "@tanstack/react-query";
 import { getMyBookings } from "../../api/bookingApi";
 import { initializePayment } from "../../api/paymentApi";
@@ -5,6 +6,7 @@ import  useAuthStore  from "../../store/authStore";
 import { toast } from "react-hot-toast";
 
 const MyBookings = () => {
+  const navigate = useNavigate();
   const { user } = useAuthStore();
 
   const { data, isLoading, error } = useQuery({
@@ -88,7 +90,7 @@ const MyBookings = () => {
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-orange-400">My Bookings</h1>
         <button
-          onClick={() => navigate("/services")}
+          onClick={() => navigate("/plans-and-pricing")}
           className="bg-amber-500 text-black px-5 py-3 rounded-lg font-semibold hover:bg-amber-600 transition"
         >
           Book New Service
@@ -99,7 +101,7 @@ const MyBookings = () => {
         <div className="bg-white/5 p-12 rounded-xl shadow text-center border border-neutral-800">
           <p className="text-gray-400 text-lg">You haven't made any bookings yet.</p>
           <button
-            onClick={() => navigate("/services")}
+            onClick={() => navigate("/plans-and-pricing")}
             className="mt-4 bg-amber-500 px-6 py-2 rounded-lg font-semibold hover:bg-amber-600 transition text-black"
           >
             Browse Services

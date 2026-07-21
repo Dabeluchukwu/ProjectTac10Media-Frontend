@@ -41,7 +41,7 @@ export const updateBookingStatus = async (bookingId, status) => {
 };
 
 
-// ✅ Update booking progress (admin)
+//  Update booking progress (admin)
 export const updateBookingProgress = async (bookingId, progress) => {
   const response = await api.patch(`/bookings/admin/${bookingId}/progress`, { progress });
   return response.data.data;

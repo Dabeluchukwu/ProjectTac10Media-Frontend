@@ -49,8 +49,8 @@ const PaymentVerify = () => {
 
   // Determine where to redirect based on purpose
   const getRedirectPath = () => {
-    if (purpose === "booking") return "/dashboard/bookings";
-    if (purpose === "course") return "/dashboard/courses";
+    if (purpose === "booking") return "/dashboard";
+    if (purpose === "course") return "/dashboard";
     return "/dashboard";
   };
 

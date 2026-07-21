@@ -5,14 +5,21 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- ✅ Updated CSP with backend URL -->
+    <!-- ✅ CSP covers both localhost (dev) and Render (production) -->
     <meta http-equiv="Content-Security-Policy" 
           content="
             default-src 'self'; 
             script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.paystack.com https://js.paystack.co https://*.paystack.com https://www.googletagmanager.com https://*.googletagmanager.com blob:; 
             style-src 'self' 'unsafe-inline'; 
             img-src 'self' data: https: blob: https://*.google-analytics.com; 
-            connect-src 'self' https://api.paystack.co https://*.paystack.com https://projecttac10media-backend.onrender.com https://www.google-analytics.com https://*.google-analytics.com; 
+            connect-src 'self' 
+              https://api.paystack.co 
+              https://*.paystack.com 
+              https://projecttac10media-backend.onrender.com 
+              https://www.google-analytics.com 
+              https://*.google-analytics.com 
+              http://localhost:5000 
+              http://localhost:5173; 
             frame-src https://checkout.paystack.com; 
           " />
     

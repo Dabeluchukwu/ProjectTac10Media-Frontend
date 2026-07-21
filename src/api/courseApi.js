@@ -14,11 +14,11 @@ export const getCourseById = async (id) => {
 // Get instructor's courses
 export const getInstructorCourses = async () => {
   const response = await api.get("/courses/instructor");
-  // ✅ Return the nested data
+  //  Return the nested data
   return response.data.data;
 };
 
-// ✅ Get instructor stats -
+//  Get instructor stats -
 export const getInstructorStats = async () => {
   const response = await api.get("/dashboard/instructor");
   return response.data.data;

@@ -39,7 +39,6 @@ const UserDashboard = lazy(() => import("../pages/user/Dashboard"));
 const MyCourses = lazy(() => import("../pages/user/MyCourses"));
 const MyBookings = lazy(() => import("../pages/user/MyBookings"));
 const Payments = lazy(() => import("../pages/user/Payments"));
-const Settings = lazy(() => import("../pages/user/Settings"));
 const MyProgress = lazy(() => import("../pages/user/CourseProgress"));
 const Exam = lazy(() => import("../pages/user/Exam"));
 const ExamResults = lazy(() => import("../pages/user/ExamResults"));
@@ -151,7 +150,6 @@ const router = createBrowserRouter([
       { path: "bookings", element: <MyBookings /> },
       { path: "payments", element: <Payments /> },
       { path: "profile", element: <Profile /> },
-      { path: "settings", element: <Settings /> },
       { path: "progress", element: <MyProgress /> },
       { path: "certificates", element: <Certificates /> },
     ],

@@ -29,15 +29,16 @@ const CloudinaryUpload = ({ value, onChange, onRemove, label = "Image", folder =
 
     // Upload to Cloudinary
     const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+    console.log("📤 Cloudinary cloud name:", cloudName);
     if (!cloudName) {
-      toast.error("Cloudinary is not configured");
+      toast.error("Cloudinary is not configured (missing VITE_CLOUDINARY_CLOUD_NAME)");
       setIsUploading(false);
       return;
     }
 
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", folder);
+    formData.append("upload_preset", folder); // uses folder name as upload preset
 
     setIsUploading(true);
 
@@ -51,6 +52,7 @@ const CloudinaryUpload = ({ value, onChange, onRemove, label = "Image", folder =
       );
 
       const data = await response.json();
+      console.log("📦 Cloudinary response:", data);
 
       if (!response.ok) {
         throw new Error(data.error?.message || "Upload failed");
@@ -62,6 +64,7 @@ const CloudinaryUpload = ({ value, onChange, onRemove, label = "Image", folder =
     } catch (error) {
       console.error("Upload error:", error);
       toast.error(error.message || "Failed to upload image");
+      // Reset preview to previous value
       setPreview(value || null);
     } finally {
       setIsUploading(false);

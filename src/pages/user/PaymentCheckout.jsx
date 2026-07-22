@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { verifyPayment, initializePayment } from "../../api/paymentApi";
+import { verifyPayment, initializePayment, submitManualPayment } from "../../api/paymentApi";
 import useAuthStore from "../../store/authStore";
+import { PAYMENT_METHOD } from "../../config";
+import ManualPaymentModal from "../../components/payment/ManualPaymentModal";
 
 const PaymentCheckout = () => {
   const navigate = useNavigate();
@@ -13,19 +15,19 @@ const PaymentCheckout = () => {
   const [status, setStatus] = useState("initializing");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showManualModal, setShowManualModal] = useState(false);
+  const [manualPaymentData, setManualPaymentData] = useState(null);
 
   const reference = searchParams.get("reference");
-  const purpose = searchParams.get("purpose"); // ✅ Get purpose from URL
+  const purpose = searchParams.get("purpose");
   let registrationId = searchParams.get("registrationId");
-  let bookingId = searchParams.get("bookingId"); // ✅ Get bookingId from URL
+  let bookingId = searchParams.get("bookingId");
   const amount = searchParams.get("amount");
 
-  // ✅ If registrationId is 'null' string, convert to null
+  // Clean up null/undefined values
   if (registrationId === 'null' || registrationId === 'undefined') {
     registrationId = null;
   }
-
-  // ✅ If bookingId is 'null' string, convert to null
   if (bookingId === 'null' || bookingId === 'undefined') {
     bookingId = null;
   }
@@ -37,18 +39,11 @@ const PaymentCheckout = () => {
   console.log("  purpose:", purpose);
   console.log("  registrationId (cleaned):", registrationId);
   console.log("  bookingId (cleaned):", bookingId);
-  console.log("  amount (raw):", amount);
   console.log("  parsedAmount:", parsedAmount);
+  console.log("  PAYMENT_METHOD:", PAYMENT_METHOD);
 
-  // ✅ AUTH DEBUG
+  // Redirect if not authenticated
   const token = localStorage.getItem("token");
-  console.log("🔍 AUTH DEBUG:");
-  console.log("  user:", user);
-  console.log("  user id:", user?._id || user?.id);
-  console.log("  token exists:", !!token);
-  console.log("  isAuthenticated:", !!user && !!token);
-
-  // ✅ Redirect if not authenticated
   useEffect(() => {
     if (!user || !token) {
       console.warn("⚠️ Not authenticated - redirecting to login");
@@ -63,28 +58,41 @@ const PaymentCheckout = () => {
       setStatus("verifying");
       verifyPaymentHandler();
     } else if (courseId) {
-      // ✅ Check if we have registrationId before initializing (course payment)
-      if (!registrationId) {
+      // Check if we have registrationId before initializing (course payment)
+      if (!registrationId && purpose !== "booking") {
         console.error("❌ No registrationId found in URL!");
         setStatus("failed");
         setError("Registration not found. Please go back and try again.");
         return;
       }
+      
+      // ✅ Check if manual payment is enabled
+      if (PAYMENT_METHOD === "manual") {
+        // Show manual payment modal instead of redirecting to Paystack
+        setManualPaymentData({
+          purpose: purpose || "course",
+          referenceId: purpose === "booking" ? bookingId : registrationId,
+          amount: parsedAmount,
+        });
+        setShowManualModal(true);
+        setStatus("ready");
+        return;
+      }
+      
+      // Paystack flow
       initializePaymentHandler();
     } else {
       setStatus("failed");
       setError("No payment information found");
     }
-  }, [reference, courseId]);
+  }, [reference, courseId, registrationId, bookingId, purpose, parsedAmount]);
 
   const initializePaymentHandler = async () => {
     setLoading(true);
     try {
-      // ✅ Build request data based on purpose
       let requestData = {};
 
       if (purpose === "booking") {
-        // ✅ Booking payment
         requestData = {
           purpose: "booking",
           bookingId: bookingId,
@@ -94,7 +102,6 @@ const PaymentCheckout = () => {
         };
         console.log("📤 Sending booking payment request:", requestData);
       } else {
-        // ✅ Course payment (default)
         requestData = {
           purpose: "course",
           registrationId: registrationId,
@@ -132,13 +139,9 @@ const PaymentCheckout = () => {
     try {
       const response = await verifyPayment(reference);
       console.log("📥 Verify payment response:", response);
-      console.log("  response.data:", response?.data);
-      console.log("  status:", response?.data?.data?.status);
 
       if (response?.data?.data?.status === "success") {
         console.log("✅ Payment verified successfully!");
-
-        // ✅ Invalidate cache based on purpose
         queryClient.invalidateQueries({ queryKey: ["registrations"] });
         queryClient.invalidateQueries({ queryKey: ["progress"] });
         queryClient.invalidateQueries({ queryKey: ["my-bookings"] });
@@ -146,7 +149,6 @@ const PaymentCheckout = () => {
 
         setStatus("success");
         
-        // ✅ Redirect based on purpose
         setTimeout(() => {
           if (purpose === "booking") {
             navigate("/dashboard/bookings");
@@ -161,11 +163,25 @@ const PaymentCheckout = () => {
       }
     } catch (error) {
       console.error("❌ Payment verification failed:", error);
-      console.error("  error.response:", error?.response);
-      console.error("  error.response.data:", error?.response?.data);
       setStatus("failed");
       setError(error?.response?.data?.message || "Payment verification failed");
     }
+  };
+
+  // Manual payment modal handlers
+  const handleManualPaymentSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ["registrations"] });
+    queryClient.invalidateQueries({ queryKey: ["my-bookings"] });
+    navigate(purpose === "booking" ? "/dashboard/bookings" : "/dashboard/courses");
+  };
+
+  const handleManualPaymentClose = () => {
+    setShowManualModal(false);
+    setStatus("failed");
+    setError("Payment cancelled");
+    setTimeout(() => {
+      navigate(purpose === "booking" ? "/dashboard/bookings" : "/dashboard/courses");
+    }, 1500);
   };
 
   // Loading states...
@@ -243,6 +259,18 @@ const PaymentCheckout = () => {
           </button>
         </div>
       </div>
+
+      {/* ✅ Manual Payment Modal */}
+      {showManualModal && manualPaymentData && (
+        <ManualPaymentModal
+          isOpen={showManualModal}
+          onClose={handleManualPaymentClose}
+          purpose={manualPaymentData.purpose}
+          referenceId={manualPaymentData.referenceId}
+          amount={manualPaymentData.amount}
+          onSuccess={handleManualPaymentSuccess}
+        />
+      )}
     </div>
   );
 };

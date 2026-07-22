@@ -1,13 +1,19 @@
-import { useNavigate } from "react-router-dom"; 
-import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getMyBookings } from "../../api/bookingApi";
 import { initializePayment } from "../../api/paymentApi";
-import  useAuthStore  from "../../store/authStore";
+import useAuthStore from "../../store/authStore";
 import { toast } from "react-hot-toast";
+import { useState } from "react";
+import ManualPaymentModal from "../../components/payment/ManualPaymentModal";
+import { PAYMENT_METHOD } from "../../config";
 
 const MyBookings = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
+  const queryClient = useQueryClient();
+  const [showManualModal, setShowManualModal] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["my-bookings"],
@@ -15,6 +21,13 @@ const MyBookings = () => {
   });
 
   const handlePayNow = async (booking) => {
+    if (PAYMENT_METHOD === "manual") {
+      setSelectedBooking(booking);
+      setShowManualModal(true);
+      return;
+    }
+
+    // Original Paystack flow
     try {
       const response = await initializePayment({
         purpose: "booking",
@@ -48,7 +61,9 @@ const MyBookings = () => {
     return (
       <div className="p-6 bg-red-50 text-red-600 rounded-lg">
         <p className="font-semibold">Failed to load bookings</p>
-        <p className="text-sm mt-1">{error.message || "Please try again later"}</p>
+        <p className="text-sm mt-1">
+          {error.message || "Please try again later"}
+        </p>
       </div>
     );
   }
@@ -99,7 +114,9 @@ const MyBookings = () => {
 
       {bookings.length === 0 ? (
         <div className="bg-white/5 p-12 rounded-xl shadow text-center border border-neutral-800">
-          <p className="text-gray-400 text-lg">You haven't made any bookings yet.</p>
+          <p className="text-gray-400 text-lg">
+            You haven't made any bookings yet.
+          </p>
           <button
             onClick={() => navigate("/plans-and-pricing")}
             className="mt-4 bg-amber-500 px-6 py-2 rounded-lg font-semibold hover:bg-amber-600 transition text-black"
@@ -117,21 +134,29 @@ const MyBookings = () => {
               <div className="p-6">
                 <div className="flex items-center justify-between mb-2">
                   <h2 className="text-xl font-semibold text-white">
-                    {booking.service?.name || booking.package?.name || "Booking"}
+                    {booking.service?.name ||
+                      booking.package?.name ||
+                      "Booking"}
                   </h2>
-                  <span className={`text-xs px-2 py-1 rounded ${getStatusBadge(booking.status)}`}>
+                  <span
+                    className={`text-xs px-2 py-1 rounded ${getStatusBadge(booking.status)}`}
+                  >
                     {booking.status}
                   </span>
                 </div>
 
                 <p className="text-gray-400 text-sm mb-4">
-                  {booking.service?.description || booking.package?.description || "No description"}
+                  {booking.service?.description ||
+                    booking.package?.description ||
+                    "No description"}
                 </p>
 
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-400">Date:</span>
-                    <span className="text-white">{formatDate(booking.bookingDate)}</span>
+                    <span className="text-white">
+                      {formatDate(booking.bookingDate)}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-400">Location:</span>
@@ -139,25 +164,32 @@ const MyBookings = () => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-400">Amount:</span>
-                    <span className="text-amber-400 font-semibold">{formatCurrency(booking.amount)}</span>
+                    <span className="text-amber-400 font-semibold">
+                      {formatCurrency(booking.amount)}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-400">Payment:</span>
-                    <span className={`text-xs px-2 py-0.5 rounded ${getPaymentBadge(booking.paymentStatus)}`}>
-                      {booking.paymentStatus === "paid" ? "✅ Paid" : "⏳ Unpaid"}
+                    <span
+                      className={`text-xs px-2 py-0.5 rounded ${getPaymentBadge(booking.paymentStatus)}`}
+                    >
+                      {booking.paymentStatus === "paid"
+                        ? "✅ Paid"
+                        : "⏳ Unpaid"}
                     </span>
                   </div>
                 </div>
 
                 {/* Payment Button */}
-                {booking.paymentStatus === "unpaid" && booking.status !== "cancelled" && (
-                  <button
-                    onClick={() => handlePayNow(booking)}
-                    className="mt-4 w-full bg-amber-500 text-black py-2 rounded-lg font-semibold hover:bg-amber-600 transition"
-                  >
-                    💳 Pay Now
-                  </button>
-                )}
+                {booking.paymentStatus === "unpaid" &&
+                  booking.status !== "cancelled" && (
+                    <button
+                      onClick={() => handlePayNow(booking)}
+                      className="mt-4 w-full bg-amber-500 text-black py-2 rounded-lg font-semibold hover:bg-amber-600 transition"
+                    >
+                      💳 Pay Now
+                    </button>
+                  )}
 
                 {booking.paymentStatus === "paid" && (
                   <div className="mt-4 w-full bg-green-500/10 text-green-400 py-2 rounded-lg text-center text-sm font-medium border border-green-500/20">
@@ -168,6 +200,23 @@ const MyBookings = () => {
             </div>
           ))}
         </div>
+      )}
+
+      {/* ✅ Modal placed INSIDE the return statement - FIXED */}
+      {showManualModal && selectedBooking && (
+        <ManualPaymentModal
+          isOpen={showManualModal}
+          onClose={() => {
+            setShowManualModal(false);
+            setSelectedBooking(null);
+          }}
+          purpose="booking"
+          referenceId={selectedBooking._id}
+          amount={selectedBooking.amount}
+          onSuccess={() => {
+            queryClient.invalidateQueries(["my-bookings"]);
+          }}
+        />
       )}
     </div>
   );

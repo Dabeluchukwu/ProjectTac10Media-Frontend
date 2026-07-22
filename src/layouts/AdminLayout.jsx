@@ -111,6 +111,8 @@ const AdminLayout = () => {
     { to: "/admin/bookings", label: "Bookings", icon: "📅" },
     { to: "/admin/jobs", label: "Jobs", icon: "💼" },
     { to: "/admin/payments", label: "Payments", icon: "💰" },
+     { to: "/admin/manual-payments", label: "Manual Payments", icon: "💳" },
+  { to: "/admin/bank-accounts", label: "Bank Accounts", icon: "🏦" },
     // { to: "/admin/reviews", label: "Reviews", icon: "⭐" },
     { to: "/admin/profile", label: "Profile", icon: "👤" },
   ];

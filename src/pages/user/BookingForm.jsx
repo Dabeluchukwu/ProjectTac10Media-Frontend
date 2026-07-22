@@ -6,12 +6,18 @@ import { Calendar, MapPin, FileText, CreditCard, ArrowLeft, CheckCircle, AlertCi
 import { createBooking } from "../../api/bookingApi";
 import { initializePayment } from "../../api/paymentApi";
 import useAuthStore from "../../store/authStore";
+import ManualPaymentModal from "../../components/payment/ManualPaymentModal";
+import { PAYMENT_METHOD } from "../../config";
 
 const BookingForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuthStore();
   const queryClient = useQueryClient();
+
+  // State for manual payment modal
+  const [showManualModal, setShowManualModal] = useState(false);
+  const [manualBooking, setManualBooking] = useState(null);
 
   // Get selected item from navigation state
   const { state } = location;
@@ -26,7 +32,7 @@ const BookingForm = () => {
     itemName: selectedItem.itemName || "",
     itemPrice: selectedItem.itemPrice || 0,
     itemDescription: selectedItem.itemDescription || "",
-    features: selectedItem.features || [], 
+    features: selectedItem.features || [],
     services: selectedItem.services || [],
   });
 
@@ -76,7 +82,7 @@ const BookingForm = () => {
     onSuccess: (response) => {
       const booking = response?.data?.data;
       toast.success("Booking created successfully!");
-      // Proceed to payment
+      // Proceed to payment (manual or Paystack)
       handlePayment(booking);
     },
     onError: (error) => {
@@ -85,8 +91,18 @@ const BookingForm = () => {
     },
   });
 
-  // Handle payment
+  // Handle payment (now supports both manual and Paystack)
   const handlePayment = async (booking) => {
+    // ✅ Check if manual payment is enabled
+    if (PAYMENT_METHOD === "manual") {
+      // Open the manual payment modal with the booking
+      setManualBooking(booking);
+      setShowManualModal(true);
+      setLoading(false); // stop loading because we're showing the modal
+      return;
+    }
+
+    // 🔵 Paystack flow (original)
     try {
       const paymentResponse = await initializePayment({
         purpose: "booking",
@@ -294,8 +310,11 @@ const BookingForm = () => {
                 )}
               </button>
 
+              {/* Dynamic message based on payment method */}
               <p className="text-xs text-gray-500 text-center mt-4">
-                You will be redirected to Paystack to complete your payment securely.
+                {PAYMENT_METHOD === "manual"
+                  ? "After booking, you will be asked to upload your payment receipt for manual confirmation."
+                  : "You will be redirected to Paystack to complete your payment securely."}
               </p>
             </form>
           </div>
@@ -344,13 +363,36 @@ const BookingForm = () => {
 
               <div className="mt-6 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
                 <p className="text-xs text-amber-400 text-center">
-                  🔒 Secure payment powered by Paystack
+                  {PAYMENT_METHOD === "manual"
+                    ? "💳 Manual payment via bank transfer"
+                    : "🔒 Secure payment powered by Paystack"}
                 </p>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* ✅ Manual Payment Modal */}
+      {showManualModal && manualBooking && (
+        <ManualPaymentModal
+          isOpen={showManualModal}
+          onClose={() => {
+            setShowManualModal(false);
+            setManualBooking(null);
+            // Optionally navigate to bookings page
+            navigate("/dashboard/bookings");
+          }}
+          purpose="booking"
+          referenceId={manualBooking._id}
+          amount={manualBooking.amount}
+          onSuccess={() => {
+            queryClient.invalidateQueries(["my-bookings"]);
+            // Optionally navigate to bookings page after success
+            navigate("/dashboard/bookings");
+          }}
+        />
+      )}
     </div>
   );
 };

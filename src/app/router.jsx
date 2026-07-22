@@ -23,6 +23,7 @@ const Careers = lazy(() => import("../pages/public/Careers/Careers"));
 const PlansAndPricing = lazy(() => import("../pages/public/PlansAndPricing/PlansAndPricing"));
 const JobDetails = lazy(() => import("../pages/public/Careers/JobDetails"));
 
+
 // Auth Pages
 const Login = lazy(() => import("../pages/auth/Login"));
 const Register = lazy(() => import("../pages/auth/Register"));
@@ -65,6 +66,8 @@ const AdminPackages = lazy(() => import("../pages/admin/Packages/Packages"));
 const PackageForm = lazy(() => import("../pages/admin/Packages/PackageForm"));
 const AdminServices = lazy(() => import("../pages/admin/Services/Services"));
 const ServiceForm = lazy(() => import("../pages/admin/Services/ServiceForm"));
+const AdminManualPayments = lazy(() => import("../pages/admin/ManualPayments"));
+const BankAccounts = lazy(() => import("../pages/admin/BankAccounts"));
 
 // SuperAdmin Pages
 const SuperAdminDashboard = lazy(() => import("../pages/super-admin/Dashboard"));
@@ -212,6 +215,8 @@ const router = createBrowserRouter([
               { path: ":id/edit", element: <ServiceForm /> },
             ],
           },
+          { path: "manual-payments", element: <AdminManualPayments /> },
+{ path: "bank-accounts", element: <BankAccounts /> },
         ],
       },
     ],
@@ -255,6 +260,8 @@ const router = createBrowserRouter([
               { path: ":id/edit", element: <ServiceForm /> },
             ],
           },
+          { path: "manual-payments", element: <AdminManualPayments /> },
+{ path: "bank-accounts", element: <BankAccounts /> },
         ],
       },
     ],

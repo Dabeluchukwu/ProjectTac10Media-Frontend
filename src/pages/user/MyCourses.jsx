@@ -1,16 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import useRegistrations from "../../hooks/useRegistrations";
 import useProgress from "../../hooks/useProgress";
 import { useExamStatus } from "../../hooks/useExamStatus";
 import { initializePayment } from "../../api/paymentApi";
 import { toast } from "react-hot-toast";
 import useAuthStore from "../../store/authStore";
+import ManualPaymentModal from "../../components/payment/ManualPaymentModal";
+import { PAYMENT_METHOD } from "../../config";
 
 const MyCourses = () => {
   const { registrations, loading, error } = useRegistrations();
   const navigate = useNavigate();
   const { user } = useAuthStore();
+  const queryClient = useQueryClient();
+
+  const [showManualModal, setShowManualModal] = useState(false);
+  const [selectedRegistration, setSelectedRegistration] = useState(null);
 
   // ✅ Ensure registrations is an array before passing to useProgress
   const registrationsArray = Array.isArray(registrations) ? registrations : [];
@@ -38,6 +45,48 @@ const MyCourses = () => {
       console.log(`    Status: ${reg.status}`);
     });
   }, [registrationsArray, examResults]);
+
+  const handlePayNow = async (registration) => {
+    const regId = registration?._id || registration?.id;
+    if (!regId) {
+      toast.error("Registration not found. Please try again.");
+      return;
+    }
+
+    const price = registration.course?.price || 0;
+    if (price <= 0) {
+      toast.error("Invalid course price. Please contact support.");
+      return;
+    }
+
+    // ✅ Check payment method
+    if (PAYMENT_METHOD === "manual") {
+      setSelectedRegistration(registration);
+      setShowManualModal(true);
+      return;
+    }
+
+    // ✅ Paystack flow
+    try {
+      const response = await initializePayment({
+        purpose: "course",
+        registrationId: regId,
+        email: user?.email,
+        referenceId: regId,
+        amount: price,
+      });
+      if (response?.data?.data?.authorizationUrl) {
+        window.location.href = response.data.data.authorizationUrl;
+      } else {
+        toast.error("Failed to initialize payment. Please try again.");
+      }
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ||
+          "Failed to initialize payment. Please try again."
+      );
+    }
+  };
 
   if (loading || progressLoading || examLoading) {
     return (
@@ -117,22 +166,17 @@ const MyCourses = () => {
 
             // ✅ Only show exam/certificate buttons if course is completed
             if (isCompleted) {
-              // Check if certificate exists (passed exam)
               if (examStatus?.isPassed) {
                 buttonText = "🎓 View Certificate";
                 buttonAction = () => navigate("/dashboard/certificates");
                 buttonColor = "bg-green-600 hover:bg-green-700 text-white";
                 isDisabled = false;
-              } 
-              // Check if exam was attempted and failed
-              else if (examStatus?.isFailed) {
+              } else if (examStatus?.isFailed) {
                 buttonText = "📝 Retake Exam";
                 buttonAction = () => navigate(`/exam/${courseId}`);
                 buttonColor = "bg-red-600 hover:bg-red-700 text-white";
                 isDisabled = false;
-              } 
-              // Check if exam exists for this course
-              else if (examStatus?.hasExam) {
+              } else if (examStatus?.hasExam) {
                 buttonText = "📝 Take Exam";
                 buttonAction = () => navigate(`/exam/${courseId}`);
                 buttonColor = "bg-purple-600 hover:bg-purple-700 text-white";
@@ -242,40 +286,10 @@ const MyCourses = () => {
                     </span>
                   </div>
 
-                  {/* ✅ Pay Now Button */}
+                  {/* ✅ Pay Now Button - FIXED */}
                   {registration?.paymentStatus === "pending" && (
                     <button
-                      onClick={async () => {
-                        const regId = registration?._id || registration?.id;
-                        if (!regId) {
-                          toast.error("Registration not found. Please try again.");
-                          return;
-                        }
-                        const price = course?.price || 0;
-                        if (price <= 0) {
-                          toast.error("Invalid course price. Please contact support.");
-                          return;
-                        }
-                        try {
-                          const response = await initializePayment({
-                            purpose: "course",
-                            registrationId: regId,
-                            email: user?.email,
-                            referenceId: regId,
-                            amount: price,
-                          });
-                          if (response?.data?.data?.authorizationUrl) {
-                            window.location.href = response.data.data.authorizationUrl;
-                          } else {
-                            toast.error("Failed to initialize payment. Please try again.");
-                          }
-                        } catch (error) {
-                          toast.error(
-                            error?.response?.data?.message ||
-                              "Failed to initialize payment. Please try again."
-                          );
-                        }
-                      }}
+                      onClick={() => handlePayNow(registration)}
                       className="mt-3 w-full bg-amber-500 text-black py-2 rounded-lg font-semibold hover:bg-amber-600 transition"
                     >
                       💳 Pay Now (₦{course?.price?.toLocaleString() || 0})
@@ -299,6 +313,23 @@ const MyCourses = () => {
             );
           })}
         </div>
+      )}
+
+      {/* ✅ Manual Payment Modal */}
+      {showManualModal && selectedRegistration && (
+        <ManualPaymentModal
+          isOpen={showManualModal}
+          onClose={() => {
+            setShowManualModal(false);
+            setSelectedRegistration(null);
+          }}
+          purpose="course"
+          referenceId={selectedRegistration._id}
+          amount={selectedRegistration.course?.price || 0}
+          onSuccess={() => {
+            queryClient.invalidateQueries(["registrations"]);
+          }}
+        />
       )}
     </div>
   );

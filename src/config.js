@@ -1,0 +1,1 @@
+export const PAYMENT_METHOD = import.meta.env.VITE_PAYMENT_METHOD || 'paystack';

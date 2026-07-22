@@ -276,111 +276,120 @@ const LearnCourse = () => {
   const paymentStatus = getPaymentStatus(courseId);
   const enrollment = getEnrollment(courseId);
 
-  // Case 1: Payment is pending
-  if (isPending) {
-    console.log("🔍 PENDING PAYMENT - Course price:", course?.price);
-    console.log("🔍 PENDING PAYMENT - Registration:", registration);
-    console.log("🔍 PENDING PAYMENT - Registration ID:", registrationId);
+ // Case 1: Payment is pending
+if (isPending) {
+  // ✅ Auto-refresh registration data when payment is pending
+  useEffect(() => {
+    if (isPending) {
+      console.log("🔄 Payment is pending - checking for updates...");
+      const interval = setInterval(() => {
+        console.log("🔄 Auto-refreshing registration data...");
+        queryClient.invalidateQueries({ queryKey: ["registrations"] });
+        refetchRegistrations();
+      }, 5000); // Check every 5 seconds
 
-    return (
-      <div className="min-h-screen bg-[#0b0b0b] text-white flex flex-col items-center justify-center p-6">
-        <div className="bg-neutral-900 rounded-xl p-8 max-w-md w-full border border-neutral-800">
-          <div className="text-center">
-            <div className="text-6xl mb-4">💳</div>
-            <h2 className="text-2xl font-bold text-amber-400 mb-4">
-              Payment Required
-            </h2>
-            <p className="text-gray-400 mb-2">
-              You've started the enrollment process but haven't completed
-              payment yet.
-            </p>
-            <p className="text-gray-500 text-sm mb-6">
-              Complete your payment to access the course content.
-            </p>
+      return () => clearInterval(interval);
+    }
+  }, [isPending, queryClient, refetchRegistrations]);
 
-            <div className="bg-neutral-800 p-4 rounded-lg mb-6">
-              <p className="text-sm text-gray-400">Course</p>
-              <p className="text-white font-semibold">{course?.title}</p>
-              <p className="text-sm text-gray-400 mt-2">Amount Due</p>
-              <p className="text-2xl font-bold text-amber-400">
-                ₦{course?.price?.toLocaleString() || "0"}
+  console.log("🔍 PENDING PAYMENT - Course price:", course?.price);
+  console.log("🔍 PENDING PAYMENT - Registration:", registration);
+  console.log("🔍 PENDING PAYMENT - Registration ID:", registrationId);
+
+  return (
+    <div className="min-h-screen bg-[#0b0b0b] text-white flex flex-col items-center justify-center p-6">
+      <div className="bg-neutral-900 rounded-xl p-8 max-w-md w-full border border-neutral-800">
+        <div className="text-center">
+          <div className="text-6xl mb-4">💳</div>
+          <h2 className="text-2xl font-bold text-amber-400 mb-4">
+            Payment Required
+          </h2>
+          <p className="text-gray-400 mb-2">
+            You've started the enrollment process but haven't completed
+            payment yet.
+          </p>
+          <p className="text-gray-500 text-sm mb-6">
+            Complete your payment to access the course content.
+          </p>
+
+          <div className="bg-neutral-800 p-4 rounded-lg mb-6">
+            <p className="text-sm text-gray-400">Course</p>
+            <p className="text-white font-semibold">{course?.title}</p>
+            <p className="text-sm text-gray-400 mt-2">Amount Due</p>
+            <p className="text-2xl font-bold text-amber-400">
+              ₦{course?.price?.toLocaleString() || "0"}
+            </p>
+            <p className="text-xs text-gray-500 mt-1">Status: Pending</p>
+            {paymentStatus && (
+              <p className="text-xs text-gray-500">
+                Payment: {paymentStatus}
               </p>
-              <p className="text-xs text-gray-500 mt-1">Status: Pending</p>
-              {paymentStatus && (
-                <p className="text-xs text-gray-500">
-                  Payment: {paymentStatus}
-                </p>
-              )}
-            </div>
+            )}
+          </div>
 
-            <div className="space-y-3">
-              <button
-                onClick={() => {
-                  const coursePrice = course?.price || 0;
+          <div className="space-y-3">
+            <button
+              onClick={() => {
+                const coursePrice = course?.price || 0;
 
-                  console.log("🔍 Complete Payment Button - Debug:");
-                  console.log("  Course ID:", courseId);
-                  console.log("  Course Price:", coursePrice);
-                  console.log("  Registration ID from state:", registrationId);
-                  console.log("  Registration object:", registration);
-                  console.log("  All Registrations:", registrations);
+                let regId = registrationId || registration?._id || registration?.id;
 
-                  // ✅ Get the registration ID from the registration object
-                  let regId =
-                    registrationId || registration?._id || registration?.id;
-
-                  // ✅ If still null, try to find it from registrations array
-                  if (!regId && registrations) {
-                    console.log("🔍 Searching registrations manually...");
-                    const found = registrations.find((reg) => {
-                      const regCourseId = reg.course?._id || reg.courseId;
-                      return regCourseId === courseId;
-                    });
-                    if (found) {
-                      regId = found._id || found.id;
-                      console.log(
-                        "  Found registration ID from lookup:",
-                        regId,
-                      );
-                    }
-                  }
-
-                  if (!regId) {
-                    console.error("❌ No registration ID found!");
-                    toast.error("Registration not found. Please try again.");
-                    return;
-                  }
-
-                  if (coursePrice <= 0) {
-                    toast.success("This course is free! Access granted.");
-                    navigate(`/dashboard/learn/${courseId}`);
-                    return;
-                  }
-
-                  console.log("✅ Navigating to checkout with:", {
-                    regId,
-                    coursePrice,
+                if (!regId && registrations) {
+                  const found = registrations.find((reg) => {
+                    const regCourseId = reg.course?._id || reg.courseId;
+                    return regCourseId === courseId;
                   });
-                  navigate(
-                    `/checkout/${courseId}?registrationId=${regId}&amount=${coursePrice}`,
-                  );
-                }}
-                className="w-full bg-amber-500 text-black px-6 py-3 rounded-lg font-semibold hover:bg-amber-600 transition"
-              >
-                Complete Payment Now (₦{course?.price?.toLocaleString() || 0})
-              </button>
-              <button
-                onClick={() => navigate("/dashboard/courses")}
-                className="w-full bg-neutral-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-neutral-700 transition"
-              >
-                ← Back to My Courses
-              </button>
-            </div>
+                  if (found) {
+                    regId = found._id || found.id;
+                  }
+                }
+
+                if (!regId) {
+                  toast.error("Registration not found. Please try again.");
+                  return;
+                }
+
+                if (coursePrice <= 0) {
+                  toast.success("This course is free! Access granted.");
+                  navigate(`/dashboard/learn/${courseId}`);
+                  return;
+                }
+
+                navigate(
+                  `/checkout/${courseId}?registrationId=${regId}&amount=${coursePrice}&purpose=course`,
+                );
+              }}
+              className="w-full bg-amber-500 text-black px-6 py-3 rounded-lg font-semibold hover:bg-amber-600 transition"
+            >
+              Complete Payment Now (₦{course?.price?.toLocaleString() || 0})
+            </button>
+            
+            {/* ✅ Check Payment Status Button */}
+            <button
+              onClick={() => {
+                console.log("🔄 Manual refresh triggered...");
+                queryClient.invalidateQueries({ queryKey: ["registrations"] });
+                queryClient.invalidateQueries({ queryKey: ["progress", courseId] });
+                refetchRegistrations();
+                toast.success("Checking payment status...");
+              }}
+              className="w-full bg-neutral-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-neutral-600 transition"
+            >
+              🔄 Check Payment Status
+            </button>
+            
+            <button
+              onClick={() => navigate("/dashboard/courses")}
+              className="w-full bg-neutral-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-neutral-700 transition"
+            >
+              ← Back to My Courses
+            </button>
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   // Case 2: Cancelled or Expired
   if (enrollmentStatus === "cancelled" || enrollmentStatus === "expired") {

@@ -114,6 +114,8 @@ const SuperAdminLayout = () => {
     { to: "/super-admin/bookings", label: "Bookings", icon: "📅" },
     { to: "/super-admin/jobs", label: "Jobs", icon: "💼" },
     { to: "/super-admin/payments", label: "Payments", icon: "💰" },
+     { to: "/admin/manual-payments", label: "Manual Payments", icon: "💳" },
+  { to: "/admin/bank-accounts", label: "Bank Accounts", icon: "🏦" },
     { to: "/super-admin/profile", label: "Profile", icon: "👤" },
     // { to: "/admin/reviews", label: "Reviews", icon: "⭐" },
     { to: "/super-admin/analytics", label: "Analytics", icon: "📈" },

@@ -86,15 +86,15 @@ const getPaymentStatus = (courseId) => {
   return paymentStatus;
 };
 
-// Check if payment is pending
+// Check if payment is pending (based on paymentStatus only)
 const isPendingPayment = (courseId) => {
-  const status = getEnrollmentStatus(courseId);
   const paymentStatus = getPaymentStatus(courseId);
-  // ✅ Check both status and paymentStatus for pending
-  const isPending = status === 'pending' || paymentStatus === 'pending';
-  console.log(`📊 isPendingPayment(${courseId}): ${isPending} (status: ${status}, paymentStatus: ${paymentStatus})`);
+  // ✅ Only check paymentStatus, not the enrollment status
+  const isPending = paymentStatus === 'pending' || paymentStatus === 'unpaid';
+  console.log(`📊 isPendingPayment(${courseId}): ${isPending} (paymentStatus: ${paymentStatus})`);
   return isPending;
 };
+
 
 // Check if enrollment is active (can access course)
 const isActiveEnrollment = (courseId) => {

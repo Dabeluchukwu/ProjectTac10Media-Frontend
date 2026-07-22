@@ -24,7 +24,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
         return <Navigate to="/instructor/dashboard" replace />;
       case "admin":
         return <Navigate to="/admin/dashboard" replace />;
-      case "superAdmin":  // ✅ ADD THIS
+      case "superAdmin":  
         return <Navigate to="/super-admin/dashboard" replace />;
       default:
         return <Navigate to="/" replace />;
